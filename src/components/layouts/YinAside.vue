@@ -44,7 +44,7 @@ emitter.on("collapse", (msg) => {
 .sidebar {
   display: block;
   position: absolute;
-  background-color: #334256;
+  background-color: #000000;
   left: 0;
   top: 70px;
   bottom: 0;

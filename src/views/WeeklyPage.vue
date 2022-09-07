@@ -2,29 +2,31 @@
   <div class="table">
     <div class="container">
       <div class="handle-box">
-        <el-col :span="2">
-          <el-select v-model="query.weeklyYear"  clearable placeholder="年份">
-            <el-option
-                v-for="item in options1"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
+        <el-row :gutter="10">
+          <el-col :span="2">
+            <el-select v-model="query.weeklyYear"  clearable placeholder="年份">
+              <el-option
+                  v-for="item in options1"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
 
-        <el-col :span="2">
-          <el-select v-model="query.weeklyDate"  clearable placeholder="周报日期">
-            <el-option
-                v-for="item in options2"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-button type="primary"  @click="getData">查询</el-button>
-        <el-button type="primary" @click="centerDialogVisible = true">生成最新周报模板</el-button>
+          <el-col :span="2">
+            <el-select v-model="query.weeklyDate"  clearable placeholder="周报日期">
+              <el-option
+                  v-for="item in options2"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-button type="primary"  @click="getData">查询</el-button>
+          <el-button type="primary" @click="setModelVisible = true">生成最新周报模板</el-button>
+        </el-row>
       </div>
       <el-table :data="data" border style="width: 100%" ref="multipleTable" height="500px">
         <el-table-column label="序号" type="index"   width="300" align="center" :index='indexMethod'> </el-table-column>
@@ -51,7 +53,7 @@
     </div>
 
     <!--添加最新周报模板-->
-    <el-dialog title="最新周报模板" v-model="centerDialogVisible" width="650px" center>
+    <el-dialog title="最新周报模板" v-model="setModelVisible" width="650px" center>
       <div class="test-box">
         <span>周报日期：</span>
         <el-date-picker
@@ -351,7 +353,8 @@ export default {
       select_word: '', // 记录输入框输入的内容
       pageSize: 10, // 页数
       currentPage: 1, // 当前页
-      idx: -1 // 记录当前点中的行
+      idx: -1, // 记录当前点中的行
+      setModelVisible:false
     }
   },
   computed: {

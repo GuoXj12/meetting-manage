@@ -1,247 +1,219 @@
 <template>
-  <div>
-    <el-row :gutter="20" class="mgb20">
-      <el-col :span="6">
-        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div class="grid-content grid-con-1">
-            <div class="grid-cont-right">
-              <div class="grid-num">{{ userCount }}</div>
-              <div>用户数量</div>
-            </div>
+  <el-row :gutter="20">
+    <el-col :span="6">
+      <el-card shadow="hover" :body-style="{ padding: '0px' }">
+        <div class="card-content">
+          <div class="card-left">
+            <el-icon><UserFilled /></el-icon>
           </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div class="grid-content grid-con-2">
-            <div class="grid-cont-right">
-              <div class="grid-num">{{ songCount }}</div>
-              <div>会议数量</div>
-            </div>
+          <div class="card-right">
+            <div class="card-num">{{ userCount }}</div>
+            <div>用户总数</div>
           </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div class="grid-content grid-con-3">
-            <div class="grid-cont-right">
-              <div class="grid-num">{{ singerCount }}</div>
-              <div>工作事项数量</div>
-            </div>
+        </div>
+      </el-card>
+    </el-col>
+    <el-col :span="6">
+      <el-card shadow="hover" :body-style="{ padding: '0px' }">
+        <div class="card-content">
+          <div class="card-left">
+            <el-icon><Monitor /></el-icon>
           </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div class="grid-content grid-con-4">
-            <div class="grid-cont-right">
-              <div class="grid-num">{{ songListCount }}</div>
-              <div>重点工作数量</div>
-            </div>
+          <div class="card-right">
+            <div class="card-num">{{ meetCount }}</div>
+            <div>会议数量</div>
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <h3 style="margin-bottom: 20px">用户性别比例</h3>
-        <div class="cav-info" style="background-color: white">
-          <div class="container" ref="userSex"></div>
         </div>
-      </el-col>
-      <el-col :span="12">
-        <h3 style="margin-bottom: 20px">歌曲类型分布</h3>
-        <div class="cav-info" style="background-color: white">
-          <div class="container" ref="songStyle"></div>
+      </el-card>
+    </el-col>
+    <el-col :span="6">
+      <el-card shadow="hover" :body-style="{ padding: '0px' }">
+        <div class="card-content">
+          <div class="card-left">
+            <el-icon><document /></el-icon>
+          </div>
+          <div class="card-right">
+            <div class="card-num">{{ weeklyCount }}</div>
+            <div>周报数量</div>
+          </div>
         </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <h3 style="margin: 20px 0">歌手性别比例</h3>
-        <div class="cav-info" style="background-color: white">
-          <div class="container" ref="singerSex"></div>
+      </el-card>
+    </el-col>
+    <el-col :span="6">
+      <el-card shadow="hover" :body-style="{ padding: '0px' }">
+        <div class="card-content">
+          <div class="card-left">
+            <el-icon><Notebook /></el-icon>
+          </div>
+          <div class="card-right">
+            <div class="card-num">{{ workCount }}</div>
+            <div>重点工作数量</div>
+          </div>
         </div>
-      </el-col>
-      <el-col :span="12">
-        <h3 style="margin: 20px 0">歌手国籍分布</h3>
-        <div class="cav-info" style="background-color: white">
-          <div class="container" ref="country"></div>
-        </div>
-      </el-col>
-    </el-row>
-  </div>
+      </el-card>
+    </el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="12">
+      <h3>用户类型</h3>
+      <el-card class="cav-info" shadow="hover" :body-style="{ padding: '0px' }" id="userType"></el-card>
+    </el-col>
+    <el-col :span="12">
+      <h3>会议类型</h3>
+      <el-card class="cav-info" shadow="hover" :body-style="{ padding: '0px' }" id="meetingType"></el-card>
+    </el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="12">
+      <h3>用户统计</h3>
+      <el-card class="cav-info" shadow="hover" :body-style="{ padding: '0px' }" id="userTypeSti"></el-card>
+    </el-col>
+    <el-col :span="12">
+      <h3>会议统计</h3>
+      <el-card class="cav-info" shadow="hover" :body-style="{ padding: '0px' }" id="meetingTypeSti"></el-card>
+    </el-col>
+  </el-row>
 </template>
-<script setup>
-import { ref, reactive, getCurrentInstance } from "vue";
-import * as echarts from "echarts";
-import { HttpManager } from "@/api/index";
 
-const ctx = getCurrentInstance().ctx;
-const userCount = ref(0);
-const songCount = ref(0);
-const singerCount = ref(0);
-const songListCount = ref(0);
-const userSex = reactive({
-  series: [
-    {
-      type: "pie",
-      data: [
-        {
-          value: 0,
-          name: "男",
-        },
-        {
-          value: 0,
-          name: "女",
-        },
-      ],
-    },
-  ],
-});
-const songStyle = reactive({
-  xAxis: {
-    type: "category",
-    data: ["华语", "粤语", "欧美", "日韩", "BGM", "轻音乐", "乐器"],
-  },
-  yAxis: {
-    type: "value",
-  },
-  series: [
-    {
-      data: [0, 0, 0, 0, 0, 0, 0],
-      type: "bar",
-      barWidth: '20%'
-    },
-  ],
-});
-const singerSex = reactive({
-  series: [
-    {
-      type: "pie",
-      data: [
-        {
-          value: 0,
-          name: "男",
-        },
-        {
-          value: 0,
-          name: "女",
-        },
-      ],
-    },
-  ],
-});
-const country = reactive({
-  xAxis: {
-    type: "category",
-    data: [
-      "中国",
-      "韩国",
-      "意大利",
-      "新加坡",
-      "美国",
-      // "马来西亚",
-      "西班牙",
-      "日本",
-    ],
-  },
-  yAxis: {
-    type: "value",
-  },
-  series: [
-    {
-      data: [0, 0, 0, 0, 0, 0, 0, 0],
-      type: "bar",
-      barWidth: '20%'
-    },
-  ],
-});
-
-function setSex(sex, arr) {
-  let value = 0;
-  const name = sex === 0 ? "男" : "女";
-  for (let item of arr) {
-    if (sex === item.sex) {
-      value++;
-    }
-  }
-  return { value, name };
-}
-HttpManager.getAllUser().then((res) => {
-  userCount.value = res.length;
-  userSex.series[0].data.push(setSex(0, res));
-  userSex.series[0].data.push(setSex(1, res));
-
-  const userSexChart = echarts.init(ctx.$refs.userSex);
-  userSexChart.setOption(userSex);
-});
-
-HttpManager.getAllSong().then((res) => {
-  songCount.value = res.length;
-});
-HttpManager.getSongList().then((res) => {
-  songListCount.value = res.length;
-  for (let item of res) {
-    for (let i = 0; i < songStyle.xAxis.data.length; i++) {
-      if (item.style.includes(songStyle.xAxis.data[i])) {
-        songStyle.series[0].data[i]++;
-      }
-    }
-  }
-  const songStyleChart = echarts.init(ctx.$refs.songStyle);
-  songStyleChart.setOption(songStyle);
-});
-
-HttpManager.getAllSinger().then((res) => {
-  singerCount.value = res.length;
-  singerSex.series[0].data.push(setSex(0, res));
-  singerSex.series[0].data.push(setSex(1, res));
-  const singerSexChart = echarts.init(ctx.$refs.singerSex);
-  singerSexChart.setOption(singerSex);
-
-  for (let item of res) {
-    for (let i = 0; i < country.xAxis.data.length; i++) {
-      if (item.location.includes(country.xAxis.data[i])) {
-        country.series[0].data[i]++;
-      }
-    }
-  }
-  const countryChart = echarts.init(ctx.$refs.country);
-  countryChart.setOption(country);
-});
-</script>
 <script>
-import { mixin } from "@/mixins";
+import { reactive } from "vue";
+import * as echarts from "echarts";
+
+const userType = reactive({
+  series: [
+    {
+      type: "pie",
+      data: [
+        {
+          value: 2,
+          name: "管理员用户",
+        },
+        {
+          value: 7,
+          name: "普通用户",
+        },
+      ],
+    },
+  ],
+});
+
+const meetingType = reactive({
+  series: [
+    {
+      type: "pie",
+      data: [
+        {
+          value: 2,
+          name: "科务会",
+        },
+        {
+          value: 7,
+          name: "专题会",
+        },
+        {
+          value: 8,
+          name: "集体学习",
+        },
+      ],
+    },
+  ],
+});
+const userTypeSti = reactive({
+  xAxis: {
+    type: "category",
+    data: ["管理员", "普通用户"],
+  },
+  yAxis: {
+    type: "value",
+  },
+  series: [
+    {
+      data: [2, 7],
+      type: "bar",
+      barWidth: "20%",
+    },
+  ],
+});
+ const meetingTypeSti = reactive({
+  xAxis: {
+    type: "category",
+    data: ["科务会", "专题会","集体学习"],
+  },
+  yAxis: {
+    type: "value",
+  },
+  series: [
+    {
+      data: [2, 7, 8],
+      type: "bar",
+      barWidth: "20%",
+    },
+  ],
+});
+
+
+
 export default {
-  mixins: [mixin],
-};
+  name: 'InfoPage',
+
+  data() {
+    return {
+      userCount:9,
+      meetCount:9,
+      weeklyCount:9,
+      workCount:0
+
+
+    }
+  },
+  mounted() {
+    const userTypeChart = echarts.init(document.getElementById("userType"));
+    userTypeChart.setOption(userType);
+    const meetingTypeChart = echarts.init(document.getElementById("meetingType"));
+    meetingTypeChart.setOption(meetingType);
+    const userTypeStiChart = echarts.init(document.getElementById("userTypeSti"));
+    userTypeStiChart.setOption(userTypeSti);
+    const meetingTypeStiChart = echarts.init(document.getElementById("meetingTypeSti"));
+    meetingTypeStiChart.setOption(meetingTypeSti);
+  },
+  created() {
+  },
+  methods: {}
+}
 </script>
+
+
 
 <style scoped>
-.grid-content {
+.card-content {
   display: flex;
   align-items: center;
+  justify-content: space-around;
   height: 100px;
-}
-
-.grid-cont-right {
-  flex: 1;
+  padding-left: 20%;
   text-align: center;
-  font-size: 14px;
-  color: #999;
 }
-
-.grid-num {
+.card-left {
+  display: flex;
+  font-size: 3rem;
+}
+.card-right {
+  flex: 1;
+  font-size: 14px;
+}
+.card-num {
   font-size: 30px;
   font-weight: bold;
 }
-
+h3 {
+  margin: 10px 0;
+  text-align: center;
+}
 .cav-info {
   border-radius: 6px;
   overflow: hidden;
-}
-.container {
-  height: 300px;
+  height: 250px;
+  background-color: white;
 }
 </style>
+

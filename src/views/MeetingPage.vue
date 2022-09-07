@@ -2,42 +2,50 @@
   <div class="table">
     <div class="container">
       <div class="handle-box">
-        <el-input v-model="query.meeting_name" placeholder="会议名称" class="handle-input mr10"></el-input>&#12288;
-        <el-col :span="2">
-          <el-select v-model="query.meeting_place"  clearable placeholder="会议地点">
-            <el-option
-                v-for="item in options1"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
+        <el-row :gutter="10">
+          <el-col :span="2">
+            <el-input v-model="query.meeting_name" placeholder="会议名称" class="handle-input mr10"></el-input>
+          </el-col>
+          <el-col :span="2">
+            <el-select v-model="query.meeting_place" clearable placeholder="会议地点">
+              <el-option
+                  v-for="item in options1"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
 
-        <el-col :span="2">
-          <el-select v-model="query.meeting_type"  clearable placeholder="会议类型">
-            <el-option
-                v-for="item in options2"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-button type="primary"  @click="getData">查询</el-button>
+          <el-col :span="2">
+            <el-select v-model="query.meeting_type" clearable placeholder="会议类型">
+              <el-option
+                  v-for="item in options2"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+
+        <el-button type="primary" @click="getData">查询</el-button>
         <el-button type="primary" @click="centerDialogVisible = true">添加会议</el-button>
+        </el-row>
+
       </div>
       <el-table :data="data" border style="width: 100%" ref="multipleTable" height="500px">
-        <el-table-column label="序号" type="index"  width="100" align="center" :index='indexMethod'> </el-table-column>
+        <el-table-column label="序号" type="index" width="100" align="center" :index='indexMethod'></el-table-column>
         <el-table-column label="会议名称" prop="meeting_name" width="240" align="center"></el-table-column>
         <el-table-column label="会议类型" prop="meeting_type" width="200" align="center">
           <template v-slot="scope">
             <span v-if="scope.row.meeting_type == 0">全体职工会议</span>
             <span v-if="scope.row.meeting_type == 1">科务会</span>
             <span v-if="scope.row.meeting_type == 2">专题会</span>
+            <span v-if="scope.row.meeting_type == 3">集体学习</span>
           </template>
         </el-table-column>
-        <el-table-column label="会议时间" prop="meeting_time" :formatter="formatDate" width="200" align="center"></el-table-column>
+        <el-table-column label="会议时间" prop="meeting_time" :formatter="formatDate" width="200"
+                         align="center"></el-table-column>
         <el-table-column label="会议地点" prop="meeting_place" width="200" align="center">
           <template v-slot="scope">
             <span v-if="scope.row.meeting_place == 0">302会议室</span>
@@ -46,30 +54,31 @@
             <span v-if="scope.row.meeting_place == 3">其他</span>
           </template>
         </el-table-column>
-        <el-table-column label="会议议程" prop="meeting_topic"    min-width="200" align="center"></el-table-column>
-        <el-table-column label="备注"    prop="meeting_remake" width="200"  align="center"></el-table-column>
+        <el-table-column label="会议议程" prop="meeting_topic" min-width="200" align="center"></el-table-column>
+        <el-table-column label="备注" prop="meeting_remake" width="200" align="center"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
-            <template v-slot="scope">
-                <el-button @click="handleEdit(scope.row)">编辑</el-button>
-                <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-            </template>
+          <template v-slot="scope">
+            <el-button @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
-          @current-change="handleCurrentChange"
-          background
-          layout="total, prev, pager, next"
-          :current-page="currentPage"
-          :page-size="pageSize"
-          :total="tableData.length">
+            @current-change="handleCurrentChange"
+            background
+            layout="total, prev, pager, next"
+            :current-page="currentPage"
+            :page-size="pageSize"
+            :total="tableData.length">
         </el-pagination>
       </div>
     </div>
 
     <!--添加新会议-->
     <el-dialog title="会议新增" v-model="centerDialogVisible" width="650px" center>
-      <el-form :model="registerForm" status-icon :rules="rules" ref="registerForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="registerForm" status-icon :rules="rules" ref="registerForm" label-width="100px"
+               class="demo-ruleForm">
         <el-form-item label="会议名称：" prop="meeting_name">
           <el-input v-model="registerForm.meeting_name" placeholder="会议名称"></el-input>
         </el-form-item>
@@ -78,6 +87,8 @@
             <el-radio :label="0">全体职工大会</el-radio>
             <el-radio :label="1">科务会</el-radio>
             <el-radio :label="2">专题会</el-radio>
+            <el-radio :label="3">集体学习</el-radio>
+
           </el-radio-group>
         </el-form-item>
         <el-form-item label="会议地点：">
@@ -89,13 +100,14 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="会议时间：" prop="meeting_time">
-            <el-date-picker type="date" placeholder="选择日期" v-model="registerForm.meeting_time" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="date" placeholder="选择日期" v-model="registerForm.meeting_time"
+                          style="width: 100%;"></el-date-picker>
         </el-form-item>
         <el-form-item label="会议议程：" prop="meeting_topic">
-          <el-input  type="textarea" placeholder="签名" v-model="registerForm.meeting_topic" ></el-input>
+          <el-input type="textarea" placeholder="签名" v-model="registerForm.meeting_topic"></el-input>
         </el-form-item>
         <el-form-item label="会议备注：" prop="meeting_remake">
-          <el-input  type="textarea" placeholder="签名" v-model="registerForm.meeting_remake" ></el-input>
+          <el-input type="textarea" placeholder="签名" v-model="registerForm.meeting_remake"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -110,13 +122,15 @@
     <el-dialog title="会议编辑" v-model="editVisible" width="650px">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="会议名称：">
-          <el-input  type="textarea" v-model="form.meeting_name"></el-input>
+          <el-input type="textarea" v-model="form.meeting_name"></el-input>
         </el-form-item>
         <el-form-item label="会议类别：">
           <el-radio-group v-model="form.meeting_type">
             <el-radio label='0'>全体职工会议</el-radio>
             <el-radio label='1'>科务会</el-radio>
             <el-radio label='2'>专题会</el-radio>
+            <el-radio label='3'>集体学习</el-radio>
+
           </el-radio-group>
         </el-form-item>
         <el-form-item label="会议地点：">
@@ -128,13 +142,14 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="会议时间：" prop="meeting_time">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.meeting_time" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="date" placeholder="选择日期" v-model="form.meeting_time"
+                          style="width: 100%;"></el-date-picker>
         </el-form-item>
         <el-form-item label="会议议程：">
-          <el-input  type="textarea" v-model="form.meeting_topic"></el-input>
+          <el-input type="textarea" v-model="form.meeting_topic"></el-input>
         </el-form-item>
         <el-form-item label="会议备注：">
-          <el-input  type="textarea" v-model="form.meeting_remake"></el-input>
+          <el-input type="textarea" v-model="form.meeting_remake"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -151,9 +166,9 @@
 </template>
 
 <script>
-import { mixin } from '../mixins'
-import { RULES } from '../enums'
-import { getDateTime } from '../utils'
+import {mixin} from '../mixins'
+import {RULES} from '../enums'
+import {getDateTime} from '../utils'
 import YinDelDialog from '@/components/dialog/YinDelDialog'
 import {MeetingManager} from "@/api/metting";
 
@@ -164,7 +179,7 @@ export default {
   components: {
     YinDelDialog
   },
-  data () {
+  data() {
     return {
       registerForm: { // 新增会议
         meeting_name: '',
@@ -174,7 +189,7 @@ export default {
         meeting_topic: '',
         meeting_remake: ''
       },
-      query:{
+      query: {
         meeting_name: '',
         meeting_type: '',
         meeting_place: ''
@@ -201,6 +216,9 @@ export default {
       }, {
         value: '2',
         label: '专题会'
+      }, {
+        value: '3',
+        label: '集体学习'
       }],
       form: { // 记录编辑会议
         id: '',
@@ -225,23 +243,23 @@ export default {
   },
   computed: {
     // 计算当前表格中的数据
-    data () {
+    data() {
       return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
     }
   },
-  created () {
+  created() {
     this.getData()
   },
   methods: {
-    indexMethod(index){
-      return (this.currentPage - 1) * this.pageSize + index + 1 ;
+    indexMethod(index) {
+      return (this.currentPage - 1) * this.pageSize + index + 1;
     },
     // 获取当前页
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.currentPage = val
     },
     // 获取用户信息
-    getData () {
+    getData() {
       this.tableData = []
       this.tempDate = []
       MeetingManager.getAllMeeting(this.query).then((res) => {
@@ -252,7 +270,7 @@ export default {
     },
 
     // 添加用户
-    addPeople () {
+    addPeople() {
       let datetime = getDateTime(this.registerForm.meeting_time)
       let params = new URLSearchParams()
       params.append('meeting_name', this.registerForm.meeting_name)
@@ -262,28 +280,28 @@ export default {
       params.append('meeting_remake', this.registerForm.meeting_remake)
       params.append('meeting_time', datetime)
       MeetingManager.setMeeting(params)
-        .then(res => {
-          if (res.code === 1) {
-            this.getData()
-            this.registerForm = {}
-            this.$notify({
-              title: '添加成功',
-              type: 'success'
-            })
-          } else {
-            this.$notify({
-              title: '添加失败',
-              type: 'error'
-            })
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
+          .then(res => {
+            if (res.code === 1) {
+              this.getData()
+              this.registerForm = {}
+              this.$notify({
+                title: '添加成功',
+                type: 'success'
+              })
+            } else {
+              this.$notify({
+                title: '添加失败',
+                type: 'error'
+              })
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
       this.centerDialogVisible = false
     },
     // 编辑
-    handleEdit (row) {
+    handleEdit(row) {
       this.idx = row.id
       this.form = {
         id: row.id,
@@ -298,7 +316,7 @@ export default {
     },
     // 保存编辑
     formatDate(row) {
-      let date = new Date(row['meeting_time'] );
+      let date = new Date(row['meeting_time']);
       console.log(date);
       console.log(row);
       console.log(row['meeting_time']);
@@ -307,7 +325,7 @@ export default {
       let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
       return Y + M + D;
     },
-    saveEdit () {
+    saveEdit() {
       let datetime = getDateTime(new Date(this.form.meeting_time))
       let params = new URLSearchParams()
       params.append('id', this.form.id)
@@ -338,25 +356,25 @@ export default {
     },
     // 确定删除
 
-    deleteRow () {
+    deleteRow() {
       MeetingManager.deleteMeeting(this.idx)
-        .then(res => {
-          if (res) {
-            this.getData()
-            this.$notify({
-              title: '删除成功',
-              type: 'success'
-            })
-          } else {
-            this.$notify({
-              title: '删除失败',
-              type: 'error'
-            })
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
+          .then(res => {
+            if (res) {
+              this.getData()
+              this.$notify({
+                title: '删除成功',
+                type: 'success'
+              })
+            } else {
+              this.$notify({
+                title: '删除失败',
+                type: 'error'
+              })
+            }
+          })
+          .catch(error => {
+            console.error(error)
+          })
       this.delVisible = false
     }
   }
