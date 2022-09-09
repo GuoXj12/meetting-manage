@@ -1,7 +1,7 @@
 import { get, post } from './request'
 // 返回所有用户
 const WeeklyManager = {
-    setModel: (params) => post(`Weekly/setModel`, params),
+    setModel: (insertDate) => get(`Weekly/setModel?insertDate=${insertDate}`),
     getWeeklyBasic: (params) => get(`Weekly/WeeklyInfo`,params),
     getWeeklyDetail: (params) => get(`Weekly/WeeklyInfoDetail`,params),
 
