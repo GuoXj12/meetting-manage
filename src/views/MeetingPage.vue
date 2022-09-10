@@ -38,10 +38,13 @@
         <el-table-column label="会议名称" prop="meeting_name" width="240" align="center"></el-table-column>
         <el-table-column label="会议类型" prop="meeting_type" width="200" align="center">
           <template v-slot="scope">
-            <span v-if="scope.row.meeting_type == 0">全体职工会议</span>
             <span v-if="scope.row.meeting_type == 1">科务会</span>
             <span v-if="scope.row.meeting_type == 2">专题会</span>
             <span v-if="scope.row.meeting_type == 3">集体学习</span>
+            <span v-if="scope.row.meeting_type == 4">全体会议</span>
+            <span v-if="scope.row.meeting_type == 5">青年理论学习</span>
+            <span v-if="scope.row.meeting_type == 6">专项培训</span>
+
           </template>
         </el-table-column>
         <el-table-column label="会议时间" prop="meeting_time" :formatter="formatDate" width="200"
@@ -84,10 +87,13 @@
         </el-form-item>
         <el-form-item label="会议类型：">
           <el-radio-group v-model="registerForm.meeting_type">
-            <el-radio :label="0">全体职工大会</el-radio>
             <el-radio :label="1">科务会</el-radio>
             <el-radio :label="2">专题会</el-radio>
             <el-radio :label="3">集体学习</el-radio>
+            <el-radio :label="4">全体会议</el-radio>
+            <el-radio :label="5">青年理论学习</el-radio>
+            <el-radio :label="6">专项培训</el-radio>
+
 
           </el-radio-group>
         </el-form-item>
@@ -126,10 +132,13 @@
         </el-form-item>
         <el-form-item label="会议类别：">
           <el-radio-group v-model="form.meeting_type">
-            <el-radio label='0'>全体职工会议</el-radio>
             <el-radio label='1'>科务会</el-radio>
             <el-radio label='2'>专题会</el-radio>
             <el-radio label='3'>集体学习</el-radio>
+            <el-radio label='4'>全体会议</el-radio>
+            <el-radio label='5'>青年理论学习</el-radio>
+            <el-radio label='6'>专项培训</el-radio>
+
 
           </el-radio-group>
         </el-form-item>
@@ -207,10 +216,8 @@ export default {
         value: '3',
         label: '其他'
       }],
-      options2: [{
-        value: '0',
-        label: '全体职工会议'
-      }, {
+      options2: [
+       {
         value: '1',
         label: '科务会'
       }, {
@@ -219,7 +226,19 @@ export default {
       }, {
         value: '3',
         label: '集体学习'
-      }],
+      },{
+          value: '4',
+          label: '全体会议'
+        },{
+          value: '5',
+          label: '青年理论学习'
+        },{
+          value: '6',
+          label: '专项培训'
+        },
+
+
+      ],
       form: { // 记录编辑会议
         id: '',
         meeting_name: '',
