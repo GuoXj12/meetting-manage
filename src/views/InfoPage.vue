@@ -120,6 +120,7 @@
                     series: [
                         {
                             type: "pie",
+
                             data: [
                                 {
                                     value: this.userType1,

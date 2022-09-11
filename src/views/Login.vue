@@ -97,7 +97,7 @@ export default {
   text-align: center;
   font-size: 30px;
   font-weight: 600;
-  color: #4169E1;
+  color: #2000ff;
 }
 
 .ms-login {

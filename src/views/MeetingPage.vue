@@ -33,7 +33,7 @@
         </el-row>
 
       </div>
-      <el-table :data="data" border style="width: 100%" ref="multipleTable" height="500px">
+      <el-table :data="data" border style="width: 100%" ref="multipleTable" height="638px">
         <el-table-column label="序号" type="index" width="100" align="center" :index='indexMethod'></el-table-column>
         <el-table-column label="会议名称" prop="meeting_name" width="240" align="center"></el-table-column>
         <el-table-column label="会议类型" prop="meeting_type" width="200" align="center">

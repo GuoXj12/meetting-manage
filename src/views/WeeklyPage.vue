@@ -14,13 +14,13 @@
                         </el-select>
                     </el-col>
 
-                    <el-col :span="2">
+                    <el-col :span="2.5">
                         <el-select v-model="query.weeklyDate" clearable placeholder="周报日期">
                             <el-option
                                     v-for="item in options2"
                                     :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    :label="item.model_date"
+                                    :value="item.model_date">
                             </el-option>
                         </el-select>
                     </el-col>
@@ -28,7 +28,7 @@
                     <el-button type="primary" @click="setModelVisible = true">生成最新周报模板</el-button>
                 </el-row>
             </div>
-            <el-table :data="data" border style="width: 100%" ref="multipleTable" height="500px">
+            <el-table :data="data" border style="width: 100%" ref="multipleTable" height="638px">
                 <el-table-column label="序号" type="index" width="300" align="center"
                                  :index='indexMethod'></el-table-column>
                 <el-table-column label="周报日期" prop="model_date" min-width="240" align="center"></el-table-column>
@@ -150,14 +150,18 @@
         </el-dialog>
 
         <!-- 周报填写页面 -->
-        <el-dialog title=" 周报填写" v-model="setVisible" width="850px">
+        <el-dialog title=" 周报编辑页面" v-model="setVisible" width="850px">
             <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="本周工作总结" name="first">
                     <el-tabs v-model="activeName1" @tab-click="handleClick1">
                         <el-tab-pane label="参会情况" name="first1">
                             <el-descriptions title="专题会" :column="1" :size="size">
+
                                 <el-descriptions-item>
-                                    <el-button type="primary" @click="saveMeetingTopic">保 存</el-button>
+                                    <el-button type="success" @click="saveMeetingTopic()">保存会议情况</el-button>
+                                </el-descriptions-item>
+
+                                <el-descriptions-item>
                                     <el-button type="primary" plain @click="addEl">添加</el-button>
                                     <el-row>
                                         <el-col :span="24" v-for="(list,index) in meetingTopic" :key="list">
@@ -192,8 +196,8 @@
                                         </el-col>
                                     </el-row>
                                 </el-descriptions-item>
-
                             </el-descriptions>
+
                         </el-tab-pane>
                         <el-tab-pane label="科室日常工作" name="second1">
                             <el-descriptions title="科室日常工作" :column="1" :size="20">
@@ -328,6 +332,9 @@
                 }],
                 setVisible: false,
                 options1: [{
+                    value: '2021',
+                    label: '2021'
+                }, {
                     value: '2022',
                     label: '2022'
                 }, {
@@ -337,19 +344,20 @@
                     value: '2024',
                     label: '2024'
                 }],
-                options2: [{
-                    value: '1',
-                    label: '2022-03 第1周'
-                }, {
-                    value: '2',
-                    label: '2022-03 第2周'
-                }, {
-                    value: '3',
-                    label: '2022-03 第3周'
-                }, {
-                    value: '4',
-                    label: '2022-03 第4周'
-                }],
+                /*                options2: [{
+                                    value: '1',
+                                    label: '2022-03 第1周'
+                                }, {
+                                    value: '2',
+                                    label: '2022-03 第2周'
+                                }, {
+                                    value: '3',
+                                    label: '2022-03 第3周'
+                                }, {
+                                    value: '4',
+                                    label: '2022-03 第4周'
+                                }],*/
+                options2: [],
                 form: "",
                 rules: RULES,
                 tableData: [], // 记录会议信息，用于显示
@@ -374,8 +382,16 @@
         created() {
             this.getData();
             this.getDay();
+            this.getOption();
         },
         methods: {
+            getOption() {
+                WeeklyManager.getOption().then((res) => {
+                    this.options2 = res
+
+                })
+            },
+
             addEl: function () {
                 let cope = {
                     meeting_detail: "",
@@ -483,7 +499,7 @@
 
             // 添加周报
             addWeeklyModel() {
-                WeeklyManager.setModel( this.insertDate)
+                WeeklyManager.setModel(this.insertDate)
                     .then(res => {
                         if (res) {
                             this.getData()
@@ -535,20 +551,17 @@
             },
             saveMeetingTopic() {
                 window.console.log("HHHHHHHH")
-                window.console.log(this.form)
-                window.console.log(this.meetingTopic)
+                window.console.log(JSON.stringify(this.form))
+                window.console.log(JSON.stringify(this.meetingTopic))
+                window.console.log(JSON.stringify(this.meetingAffairs))
                 window.console.log("HHHHHHHH")
 
-                /*      let formdata = new FormData()
-                      formdata.append('insetBasic', this.form )
-                      formdata.append('meetingTopic', this.meetingTopic )*/
-                let formdata = {
-                    insetBasic: this.form,
-                    meetingTopic: this.meetingTopic
-                }
-
-
-                WeeklyManager.saveMeetingTopic(formdata).then((res) => {
+                let formDate = {
+                        insetBasic: JSON.stringify(this.form),
+                        meetingTopic: JSON.stringify(this.meetingTopic),
+                        meetingAffairs: JSON.stringify(this.meetingAffairs)
+                    }
+                WeeklyManager.saveMeeting(formDate).then((res) => {
                     if (res) {
                         this.$notify({
                             title: '保存成功',
@@ -572,8 +585,7 @@
                 this.lvtong = null
                 this.other = null
                 this.next = null
-                this.research =null
-
+                this.research = null
 
 
                 this.idx = row.id
