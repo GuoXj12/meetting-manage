@@ -550,18 +550,27 @@
                 })
             },
             saveMeetingTopic() {
+/*
                 window.console.log("HHHHHHHH")
                 window.console.log(JSON.stringify(this.form))
                 window.console.log(JSON.stringify(this.meetingTopic))
                 window.console.log(JSON.stringify(this.meetingAffairs))
                 window.console.log("HHHHHHHH")
 
-                let formDate = {
-                        insetBasic: JSON.stringify(this.form),
-                        meetingTopic: JSON.stringify(this.meetingTopic),
-                        meetingAffairs: JSON.stringify(this.meetingAffairs)
-                    }
-                WeeklyManager.saveMeeting(formDate).then((res) => {
+*/
+
+
+                let params = new URLSearchParams()
+                params.append('insetBasic', JSON.stringify(this.form))
+                params.append('meetingTopic',JSON.stringify(this.meetingTopic))
+                params.append('meetingAffairs', JSON.stringify(this.meetingAffairs))
+
+                window.console.log("HHHHHHHH")
+                window.console.log(params)
+                window.console.log("HHHHHHHH")
+
+
+                WeeklyManager.saveMeeting(params).then((res) => {
                     if (res) {
                         this.$notify({
                             title: '保存成功',
