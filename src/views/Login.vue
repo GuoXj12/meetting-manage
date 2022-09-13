@@ -32,6 +32,8 @@
 import { mixin } from '../mixins'
 import { HttpManager } from '../api/index'
 import { INFO, MUSICNAME } from '../enums'
+import md5 from 'js-md5'
+
 
 export default {
   mixins: [mixin],
@@ -54,7 +56,7 @@ export default {
     submitForm () {
       let params = new URLSearchParams()
       params.append('name', this.ruleForm.username)
-      params.append('password', this.ruleForm.password)
+      params.append('password', md5(this.ruleForm.password))
       HttpManager.getLoginStatus(params)
         .then(res => {
           if (res.code === 1) {

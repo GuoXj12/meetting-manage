@@ -21,9 +21,9 @@
         <el-icon><Document /></el-icon>
         <span>周报管理</span>
       </el-menu-item>
-      <el-menu-item index="songList">
+      <el-menu-item index="WorkRecord">
         <el-icon><Document /></el-icon>
-        <span>人员管理</span>
+        <span>工作记录</span>
       </el-menu-item>
     </el-menu>
   </div>

@@ -23,9 +23,9 @@ const routes = [
         meta: { title: 'Singer' }
       },
       {
-        path: '/SongList',
-        component: () => import('@/views/SongListPage.vue'),
-        meta: { title: 'SongList' }
+        path: '/WorkRecord',
+        component: () => import('@/views/WorkRecordPage.vue'),
+        meta: { title: 'WorkRecord' }
       },
       {
         path: '/ListSong',
