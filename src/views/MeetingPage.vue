@@ -110,10 +110,10 @@
                           style="width: 100%;"></el-date-picker>
         </el-form-item>
         <el-form-item label="会议议程：" prop="meeting_topic">
-          <el-input type="textarea" placeholder="签名" v-model="registerForm.meeting_topic"></el-input>
+          <el-input type="textarea" placeholder="会议议程" v-model="registerForm.meeting_topic"></el-input>
         </el-form-item>
         <el-form-item label="会议备注：" prop="meeting_remake">
-          <el-input type="textarea" placeholder="签名" v-model="registerForm.meeting_remake"></el-input>
+          <el-input type="textarea" placeholder="会议备注" v-model="registerForm.meeting_remake"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>

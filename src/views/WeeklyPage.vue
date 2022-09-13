@@ -36,7 +36,7 @@
                                  align="center"></el-table-column>
                 <el-table-column label="操作" width="500" align="center">
                     <template v-slot="scope">
-                        <el-button type="info" :disabled="false" @click="handleSetDetail(scope.row)">填写周报</el-button>
+                        <el-button type="info" :disabled="true" @click="handleSetDetail(scope.row)" >填写周报</el-button>
                         <el-button @click="handleDetail(scope.row)">查看明细</el-button>
                         <el-button type="danger" :disabled="true" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
@@ -501,21 +501,19 @@
             addWeeklyModel() {
                 WeeklyManager.setModel(this.insertDate)
                     .then(res => {
-                        if (res) {
+                        if (res.code === 1) {
                             this.getData()
-                            this.registerForm = {}
                             this.$notify({
                                 title: '添加成功',
                                 type: 'success'
                             })
                             this.setModelVisible = false
-
-
                         } else {
                             this.$notify({
-                                title: '添加失败',
+                                title: '已存在，请勿重复添加"',
                                 type: 'error'
                             })
+                            this.setModelVisible = false
                         }
                     })
                     .catch(err => {
